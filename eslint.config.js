@@ -4,7 +4,6 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
-import tailwind from "eslint-plugin-tailwindcss";
 import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
@@ -16,7 +15,6 @@ export default tseslint.config(
       ...tseslint.configs.stylisticTypeChecked,
       react.configs.flat.recommended,
       react.configs.flat['jsx-runtime'],
-      ...tailwind.configs["flat/recommended"],
       prettier
     ],
     files: ['**/*.{ts,tsx}'],
