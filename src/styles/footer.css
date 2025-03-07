@@ -7,7 +7,6 @@ footer {
   grid-template-columns: 1fr auto 1fr;
   gap: 10px;
   align-items: center;
-  background-color: var(--github-black);
   padding: 12px max(12px, 3%);
   position: relative;
   bottom: 0;

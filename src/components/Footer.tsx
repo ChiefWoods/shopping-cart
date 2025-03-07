@@ -3,7 +3,7 @@ import "../styles/footer.css";
 
 export default function Footer() {
   return (
-    <footer>
+    <footer className="bg-primary">
       <span className="made-by">
         Copyright @ {new Date().getFullYear()} ChiefWoods
       </span>

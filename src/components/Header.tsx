@@ -44,7 +44,7 @@ export default function Header() {
   return (
     <header className="flex items-center justify-between p-6">
       <NavLink to="/">
-        <h1 className="text-2xl font-semibold">Fake Store</h1>
+        <h1 className="text-primary text-2xl font-semibold">Fake Store</h1>
       </NavLink>
       {isLoading && <Skeleton className="h-8 w-[100px]" />}
       {!isLoading && categories && (
@@ -52,7 +52,7 @@ export default function Header() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavLink to="/categories">
-                <NavigationMenuTrigger className="cursor-pointer font-semibold">
+                <NavigationMenuTrigger className="text-primary hover:text-primary cursor-pointer font-semibold">
                   Categories
                 </NavigationMenuTrigger>
               </NavLink>
@@ -74,16 +74,16 @@ export default function Header() {
       <Sheet>
         <SheetTrigger asChild>
           <Button variant={"outline"} size={"icon"} className="cursor-pointer">
-            <Menu />
+            <Menu className="text-primary" />
           </Button>
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>Cart</SheetTitle>
+            <SheetTitle className="text-primary text-xl">Cart</SheetTitle>
           </SheetHeader>
           <ul className="flex h-full flex-col px-4">
             {!items.length && (
-              <li className="flex flex-1 items-center justify-center">
+              <li className="text-primary flex flex-1 items-center justify-center">
                 No items added
               </li>
             )}
