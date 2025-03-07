@@ -48,6 +48,7 @@ export default tseslint.config(
       'tailwindcss/classnames-order': 'off',
       '@typescript-eslint/no-misused-promises': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unsafe-assignment': 'warn',
     },
   },
   {
