@@ -5,6 +5,7 @@ import App from "./App.tsx";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Layout from "./Layout.tsx";
 import { SWRConfig } from "swr";
+import Catalog from "./Catalog.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")!).render(
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<App />} />
+            <Route path="categories" element={<Catalog />} />
           </Route>
         </Routes>
       </BrowserRouter>
