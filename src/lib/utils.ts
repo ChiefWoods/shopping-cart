@@ -15,7 +15,7 @@ export function convertCategoryToSlug(text: string) {
 export function convertSlugToCategory(slug: string) {
   return slug
     .replace(/-/g, " ")
-    .replace(/s\s/g, "'s ")
+    .replace(/'?s\s/g, "'s ")
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
