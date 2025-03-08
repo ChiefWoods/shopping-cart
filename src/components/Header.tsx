@@ -18,24 +18,14 @@ import {
   NavigationMenuTrigger,
 } from "./ui/navigation-menu";
 import { capitalizeFirstLetter, convertCategoryToSlug } from "@/lib/utils";
-import useSWR from "swr";
 import { Skeleton } from "./ui/skeleton";
+import { useState } from "react";
+import { useFakeStore } from "@/hooks/useFakeStore";
 
 export default function Header() {
   const { items } = useCart();
-  const {
-    data: categories,
-    isLoading,
-    error,
-  } = useSWR(
-    `${import.meta.env.VITE_FAKE_STORE_API}/products/categories`,
-    async (url) => {
-      const res = await fetch(url);
-      const categories: string[] = await res.json();
-
-      return categories;
-    },
-  );
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { categories, isLoading, error } = useFakeStore();
 
   if (error) {
     throw new Error("Failed to fetch categories");
@@ -71,17 +61,17 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
       )}
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
           <Button variant={"outline"} size={"icon"} className="cursor-pointer">
             <Menu className="text-primary" />
           </Button>
         </SheetTrigger>
-        <SheetContent>
-          <SheetHeader>
+        <SheetContent className="px-4 pb-4">
+          <SheetHeader className="px-0">
             <SheetTitle className="text-primary text-xl">Cart</SheetTitle>
           </SheetHeader>
-          <ul className="flex h-full flex-col px-4">
+          <ul className="flex h-full flex-col">
             {!items.length && (
               <li className="text-primary flex flex-1 items-center justify-center">
                 No items added
@@ -97,6 +87,16 @@ export default function Header() {
               </li>
             ))}
           </ul>
+          {Boolean(items.length) && (
+            <NavLink to="/checkout">
+              <Button
+                className="w-full cursor-pointer font-semibold"
+                onClick={() => setIsOpen(false)}
+              >
+                Checkout
+              </Button>
+            </NavLink>
+          )}
         </SheetContent>
       </Sheet>
     </header>
