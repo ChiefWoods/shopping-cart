@@ -43,6 +43,7 @@ export default function Product() {
         ...items,
         {
           id: product.id,
+          category: product.category,
           title: product.title,
           price: product.price,
           amount,

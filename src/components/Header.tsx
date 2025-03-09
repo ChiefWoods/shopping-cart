@@ -56,13 +56,13 @@ export default function Header() {
   }
 
   return (
-    <header className="flex items-center justify-between p-6">
+    <header className="grid grid-cols-3 p-6">
       <NavLink to="/">
         <h1 className="text-primary text-2xl font-semibold">Fake Store</h1>
       </NavLink>
       {isLoading && <Skeleton className="h-8 w-[100px] justify-self-center" />}
       {!isLoading && categories && (
-        <NavigationMenu>
+        <NavigationMenu className="justify-self-center">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavLink to="/categories">
@@ -110,14 +110,26 @@ export default function Header() {
                 <div key={item.id} className="flex flex-col gap-4">
                   {index > 0 && <Separator />}
                   <li className="flex gap-4">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      className="aspect-square size-20"
-                    />
+                    <NavLink
+                      to={`/categories/${convertCategoryToSlug(item.category)}/${item.id}`}
+                      onClick={() => setIsOpen(false)}
+                      className="aspect-square size-20 cursor-pointer"
+                    >
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="size-20"
+                      />
+                    </NavLink>
                     <div className="flex w-full flex-col gap-4">
                       <div className="flex items-start gap-2">
-                        <p>{item.title}</p>
+                        <NavLink
+                          to={`/categories/${convertCategoryToSlug(item.category)}/${item.id}`}
+                          onClick={() => setIsOpen(false)}
+                          className="w-full"
+                        >
+                          <p>{item.title}</p>
+                        </NavLink>
                         <Button
                           size={"icon"}
                           variant={"ghost"}
@@ -162,20 +174,20 @@ export default function Header() {
               ))}
             </ul>
             {Boolean(items.length) && (
-              <div className="mt-4 flex items-center justify-between gap-4">
-                <p>Subtotal:</p>
-                <p className="font-semibold">${total}</p>
-              </div>
-            )}
-            {Boolean(items.length) && (
-              <NavLink to="/checkout">
-                <Button
-                  className="w-full cursor-pointer font-semibold"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Checkout
-                </Button>
-              </NavLink>
+              <>
+                <div className="mt-4 flex items-center justify-between gap-4">
+                  <p>Subtotal:</p>
+                  <p className="font-semibold">${total}</p>
+                </div>
+                <NavLink to="/checkout">
+                  <Button
+                    className="w-full cursor-pointer font-semibold"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Checkout
+                  </Button>
+                </NavLink>
+              </>
             )}
           </SheetContent>
         </Sheet>

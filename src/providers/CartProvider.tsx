@@ -10,6 +10,7 @@ import {
 
 interface CartItem {
   id: number;
+  category: string;
   title: string;
   price: number;
   amount: number;
