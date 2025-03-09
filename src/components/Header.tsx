@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { Menu, Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   Sheet,
@@ -7,7 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { NavLink } from "react-router";
+import { NavLink, useLocation } from "react-router";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -18,14 +18,46 @@ import {
 } from "./ui/navigation-menu";
 import { capitalizeFirstLetter, convertCategoryToSlug } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFakeStore } from "@/hooks/useFakeStore";
 import { useCart } from "@/providers/CartProvider";
+import { useSheet } from "@/providers/SheetProvider";
+import { Separator } from "./ui/separator";
 
 export default function Header() {
-  const { items } = useCart();
-  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { pathname } = useLocation();
+  const { items, setItems } = useCart();
+  const { isOpen, setIsOpen } = useSheet();
+  const [subtotal, setSubtotal] = useState<number>(0);
   const { categories, isLoading, error } = useFakeStore();
+
+  const routesToDisableSheet = ["checkout"];
+
+  function updateAmount(id: number, amount: number) {
+    setItems(
+      items.map((item) => {
+        if (item.id === id) {
+          return {
+            ...item,
+            amount,
+            total: item.price * amount,
+          };
+        }
+
+        return item;
+      }),
+    );
+  }
+
+  function removeItem(id: number) {
+    setItems(items.filter((item) => item.id !== id));
+  }
+
+  useEffect(() => {
+    setSubtotal(
+      Number(items.reduce((acc, item) => acc + item.total, 0).toFixed(2)),
+    );
+  }, [items]);
 
   if (error) {
     throw new Error("Failed to fetch categories");
@@ -61,44 +93,101 @@ export default function Header() {
           </NavigationMenuList>
         </NavigationMenu>
       )}
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button variant={"outline"} size={"icon"} className="cursor-pointer">
-            <Menu className="text-primary" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent className="px-4 pb-4">
-          <SheetHeader className="px-0">
-            <SheetTitle className="text-primary text-xl">Cart</SheetTitle>
-          </SheetHeader>
-          <ul className="flex h-full flex-col">
-            {!items.length && (
-              <li className="text-primary flex flex-1 items-center justify-center">
-                No items added
-              </li>
+      {!routesToDisableSheet.includes(pathname.split("/")[1]) && (
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
+            <Button
+              variant={"outline"}
+              size={"icon"}
+              className="cursor-pointer justify-self-end"
+            >
+              <Menu className="text-primary" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent className="px-4 pb-4">
+            <SheetHeader className="px-0">
+              <SheetTitle className="text-primary text-xl">Cart</SheetTitle>
+            </SheetHeader>
+            <ul className="flex h-full flex-col gap-4 overflow-y-auto pr-6">
+              {!items.length && (
+                <li className="text-primary flex flex-1 items-center justify-center">
+                  No items added
+                </li>
+              )}
+              {items.map((item, index) => (
+                <div key={item.id} className="flex flex-col gap-4">
+                  {index > 0 && <Separator />}
+                  <li className="flex gap-4">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="size-20"
+                    />
+                    <div className="flex w-full flex-col gap-4">
+                      <div className="flex items-start gap-2">
+                        <p>{item.title}</p>
+                        <Button
+                          size={"icon"}
+                          variant={"ghost"}
+                          className="cursor-pointer"
+                          onClick={() => removeItem(item.id)}
+                        >
+                          <Trash2 />
+                        </Button>
+                      </div>
+                      <div className="flex items-center justify-between gap-4">
+                        <p>${item.price}</p>
+                        <div className="flex items-center">
+                          <Button
+                            type="button"
+                            size={"icon"}
+                            onClick={() =>
+                              updateAmount(item.id, item.amount - 1)
+                            }
+                            disabled={item.amount === 1}
+                            className="size-6 cursor-pointer rounded-tr-none rounded-br-none"
+                          >
+                            <Minus />
+                          </Button>
+                          <p className="border-y-input h-6 w-8 border-y-1 text-center text-sm">
+                            {item.amount}
+                          </p>
+                          <Button
+                            type="button"
+                            size={"icon"}
+                            onClick={() =>
+                              updateAmount(item.id, item.amount + 1)
+                            }
+                            className="size-6 cursor-pointer rounded-tl-none rounded-bl-none"
+                          >
+                            <Plus />
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+              ))}
+            </ul>
+            {Boolean(items.length) && (
+              <div className="mt-4 flex items-center justify-between gap-4">
+                <p>Subtotal:</p>
+                <p className="font-semibold">${subtotal}</p>
+              </div>
             )}
-            {items.map((item) => (
-              <li key={item.id}>
-                <img src={item.image} alt={item.title} />
-                <p>{item.title}</p>
-                <p>
-                  {item.quantity} x ${item.price}
-                </p>
-              </li>
-            ))}
-          </ul>
-          {Boolean(items.length) && (
-            <NavLink to="/checkout">
-              <Button
-                className="w-full cursor-pointer font-semibold"
-                onClick={() => setIsOpen(false)}
-              >
-                Checkout
-              </Button>
-            </NavLink>
-          )}
-        </SheetContent>
-      </Sheet>
+            {Boolean(items.length) && (
+              <NavLink to="/checkout">
+                <Button
+                  className="w-full cursor-pointer font-semibold"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Checkout
+                </Button>
+              </NavLink>
+            )}
+          </SheetContent>
+        </Sheet>
+      )}
     </header>
   );
 }
