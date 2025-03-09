@@ -18,8 +18,8 @@ export default function Catalog() {
             to={`/categories/${convertCategoryToSlug(product.category)}`}
             key={product.category}
           >
-            <Card className="flex w-full items-center justify-center hover:shadow-lg">
-              <CardContent className="flex flex-col items-center gap-4">
+            <Card className="hover:shadow-lg">
+              <CardContent className="flex w-full flex-col items-center justify-center gap-2">
                 <img
                   src={product.image}
                   alt={product.category}
