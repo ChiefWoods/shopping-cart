@@ -8,6 +8,7 @@ import { SWRConfig } from "swr";
 import Category from "./Category.tsx";
 import Product from "./Product.tsx";
 import Catalog from "./Catalog.tsx";
+import Checkout from "./Checkout.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById("root")!).render(
             <Route path="categories" element={<Catalog />} />
             <Route path="categories/:category" element={<Category />} />
             <Route path="categories/:category/:id" element={<Product />} />
+            <Route path="checkout" element={<Checkout />} />
           </Route>
         </Routes>
       </BrowserRouter>
