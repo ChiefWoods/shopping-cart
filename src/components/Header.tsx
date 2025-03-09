@@ -7,7 +7,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./ui/sheet";
-import { useCart } from "@/hooks/useCart";
 import { NavLink } from "react-router";
 import {
   NavigationMenu,
@@ -21,6 +20,7 @@ import { capitalizeFirstLetter, convertCategoryToSlug } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 import { useFakeStore } from "@/hooks/useFakeStore";
+import { useCart } from "@/providers/CartProvider";
 
 export default function Header() {
   const { items } = useCart();
