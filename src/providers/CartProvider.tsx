@@ -4,6 +4,7 @@ import {
   ReactNode,
   SetStateAction,
   useContext,
+  useEffect,
   useState,
 } from "react";
 
@@ -19,6 +20,7 @@ interface CartItem {
 interface CartContextType {
   items: CartItem[];
   setItems: Dispatch<SetStateAction<CartItem[]>>;
+  total: number;
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
@@ -29,9 +31,16 @@ export function useCart() {
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [total, setTotal] = useState<number>(0);
+
+  useEffect(() => {
+    setTotal(
+      Number(items.reduce((acc, item) => acc + item.total, 0).toFixed(2)),
+    );
+  }, [items]);
 
   return (
-    <CartContext.Provider value={{ items, setItems }}>
+    <CartContext.Provider value={{ items, setItems, total }}>
       {children}
     </CartContext.Provider>
   );

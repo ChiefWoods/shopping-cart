@@ -3,6 +3,7 @@ import NavBreadcrumb from "./components/NavBreadcrumb";
 import useSWR from "swr";
 import { Card, CardContent } from "./components/ui/card";
 import { convertCategoryToSlug, convertSlugToCategory } from "./lib/utils";
+import { Skeleton } from "./components/ui/skeleton";
 
 export default function Category() {
   const { pathname } = useLocation();
@@ -26,7 +27,10 @@ export default function Category() {
     <>
       <NavBreadcrumb />
       <section className="grid auto-rows-fr grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {isLoading && <p>Loading...</p>}
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-[300px]" />
+          ))}
         {error && <p>Unable to fetch products</p>}
         {products?.map((product: Product) => {
           return (

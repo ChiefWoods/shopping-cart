@@ -18,7 +18,6 @@ import {
 } from "./ui/navigation-menu";
 import { capitalizeFirstLetter, convertCategoryToSlug } from "@/lib/utils";
 import { Skeleton } from "./ui/skeleton";
-import { useEffect, useState } from "react";
 import { useFakeStore } from "@/hooks/useFakeStore";
 import { useCart } from "@/providers/CartProvider";
 import { useSheet } from "@/providers/SheetProvider";
@@ -26,9 +25,8 @@ import { Separator } from "./ui/separator";
 
 export default function Header() {
   const { pathname } = useLocation();
-  const { items, setItems } = useCart();
+  const { items, setItems, total } = useCart();
   const { isOpen, setIsOpen } = useSheet();
-  const [subtotal, setSubtotal] = useState<number>(0);
   const { categories, isLoading, error } = useFakeStore();
 
   const routesToDisableSheet = ["checkout"];
@@ -53,12 +51,6 @@ export default function Header() {
     setItems(items.filter((item) => item.id !== id));
   }
 
-  useEffect(() => {
-    setSubtotal(
-      Number(items.reduce((acc, item) => acc + item.total, 0).toFixed(2)),
-    );
-  }, [items]);
-
   if (error) {
     throw new Error("Failed to fetch categories");
   }
@@ -68,7 +60,7 @@ export default function Header() {
       <NavLink to="/">
         <h1 className="text-primary text-2xl font-semibold">Fake Store</h1>
       </NavLink>
-      {isLoading && <Skeleton className="h-8 w-[100px]" />}
+      {isLoading && <Skeleton className="h-8 w-[100px] justify-self-center" />}
       {!isLoading && categories && (
         <NavigationMenu>
           <NavigationMenuList>
@@ -121,7 +113,7 @@ export default function Header() {
                     <img
                       src={item.image}
                       alt={item.title}
-                      className="size-20"
+                      className="aspect-square size-20"
                     />
                     <div className="flex w-full flex-col gap-4">
                       <div className="flex items-start gap-2">
@@ -172,7 +164,7 @@ export default function Header() {
             {Boolean(items.length) && (
               <div className="mt-4 flex items-center justify-between gap-4">
                 <p>Subtotal:</p>
-                <p className="font-semibold">${subtotal}</p>
+                <p className="font-semibold">${total}</p>
               </div>
             )}
             {Boolean(items.length) && (

@@ -3,6 +3,7 @@ import NavBreadcrumb from "./components/NavBreadcrumb";
 import { Card, CardContent } from "./components/ui/card";
 import { useFakeStore } from "./hooks/useFakeStore";
 import { convertCategoryToSlug, convertSlugToCategory } from "./lib/utils";
+import { Skeleton } from "./components/ui/skeleton";
 
 export default function Catalog() {
   const { oneOfEach, isLoading, error } = useFakeStore();
@@ -10,8 +11,11 @@ export default function Catalog() {
   return (
     <>
       <NavBreadcrumb />
-      <section className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {isLoading && <p>Loading...</p>}
+      <section className="grid flex-1 grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        {isLoading &&
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} className="h-[200px]" />
+          ))}
         {error && <p>Unable to fetch categories</p>}
         {oneOfEach?.map((product: Product) => (
           <NavLink

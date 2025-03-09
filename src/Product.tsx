@@ -6,6 +6,7 @@ import { Button } from "./components/ui/button";
 import { useState } from "react";
 import { useCart } from "./providers/CartProvider";
 import { useSheet } from "./providers/SheetProvider";
+import { Skeleton } from "./components/ui/skeleton";
 
 export default function Product() {
   const { pathname } = useLocation();
@@ -56,7 +57,21 @@ export default function Product() {
 
   return (
     <section className="flex items-start gap-6 p-6">
-      {isLoading && <p>Loading...</p>}
+      {isLoading && (
+        <>
+          <Skeleton className="aspect-square size-[200px]" />
+          <div className="flex w-full flex-col gap-6">
+            <div className="flex items-start justify-between gap-4">
+              <Skeleton className="h-8 w-1/2" />
+              <Skeleton className="h-8 w-12" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/5" />
+            </div>
+          </div>
+        </>
+      )}
       {error && <p>Unable to fetch product</p>}
       {product && (
         <>
