@@ -10,12 +10,13 @@ import Product from "./Product.tsx";
 import Catalog from "./Catalog.tsx";
 import Checkout from "./Checkout.tsx";
 import ErrorPage from "./ErrorPage.tsx";
+import RootErrorPage from "./RootErrorPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
-    errorElement: <ErrorPage />,
+    errorElement: <RootErrorPage />,
     children: [
       {
         errorElement: <ErrorPage />,
