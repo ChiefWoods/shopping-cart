@@ -56,6 +56,10 @@ export default function Product() {
     setIsOpen(true);
   }
 
+  if (error) {
+    throw new Error("Failed to fetch product");
+  }
+
   return (
     <section className="flex items-start gap-6 p-6">
       {isLoading && (
@@ -73,7 +77,6 @@ export default function Product() {
           </div>
         </>
       )}
-      {error && <p>Unable to fetch product</p>}
       {product && (
         <>
           <img

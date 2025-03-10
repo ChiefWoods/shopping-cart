@@ -8,6 +8,10 @@ import { Skeleton } from "./components/ui/skeleton";
 export default function Catalog() {
   const { oneOfEach, isLoading, error } = useFakeStore();
 
+  if (error) {
+    throw new Error("Failed to fetch categories");
+  }
+
   return (
     <>
       <NavBreadcrumb />
@@ -16,7 +20,6 @@ export default function Catalog() {
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-[200px]" />
           ))}
-        {error && <p>Unable to fetch categories</p>}
         {oneOfEach?.map((product: Product) => (
           <NavLink
             to={`/categories/${convertCategoryToSlug(product.category)}`}

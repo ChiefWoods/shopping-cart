@@ -9,31 +9,38 @@ import Category from "./Category.tsx";
 import Product from "./Product.tsx";
 import Catalog from "./Catalog.tsx";
 import Checkout from "./Checkout.tsx";
+import ErrorPage from "./ErrorPage.tsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Layout />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        element: <App />,
-      },
-      {
-        path: "categories",
-        element: <Catalog />,
-      },
-      {
-        path: "categories/:category",
-        element: <Category />,
-      },
-      {
-        path: "categories/:category/:id",
-        element: <Product />,
-      },
-      {
-        path: "checkout",
-        element: <Checkout />,
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            element: <App />,
+          },
+          {
+            path: "categories",
+            element: <Catalog />,
+          },
+          {
+            path: "categories/:category",
+            element: <Category />,
+          },
+          {
+            path: "categories/:category/:id",
+            element: <Product />,
+          },
+          {
+            path: "checkout",
+            element: <Checkout />,
+          },
+        ],
       },
     ],
   },

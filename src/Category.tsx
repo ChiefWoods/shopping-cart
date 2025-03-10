@@ -23,6 +23,10 @@ export default function Category() {
     },
   );
 
+  if (error) {
+    throw new Error("Failed to fetch products");
+  }
+
   return (
     <>
       <NavBreadcrumb />
@@ -31,7 +35,6 @@ export default function Category() {
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-[300px]" />
           ))}
-        {error && <p>Unable to fetch products</p>}
         {products?.map((product: Product) => {
           return (
             <NavLink
