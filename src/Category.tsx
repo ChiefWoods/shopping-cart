@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router";
+import { Link, useLocation } from "react-router";
 import NavBreadcrumb from "./components/NavBreadcrumb";
 import useSWR from "swr";
 import { Card, CardContent } from "./components/ui/card";
@@ -30,14 +30,14 @@ export default function Category() {
   return (
     <>
       <NavBreadcrumb />
-      <section className="grid auto-rows-fr grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {isLoading &&
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-[300px]" />
           ))}
         {products?.map((product: Product) => {
           return (
-            <NavLink
+            <Link
               to={`/categories/${convertCategoryToSlug(product.category)}/${product.id}`}
               key={product.id}
             >
@@ -56,7 +56,7 @@ export default function Category() {
                   </p>
                 </CardContent>
               </Card>
-            </NavLink>
+            </Link>
           );
         })}
       </section>
