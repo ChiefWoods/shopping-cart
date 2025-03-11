@@ -2,8 +2,9 @@ import { Link, useLocation } from "react-router";
 import NavBreadcrumb from "./components/NavBreadcrumb";
 import useSWR from "swr";
 import { Card, CardContent } from "./components/ui/card";
-import { convertCategoryToSlug, convertSlugToCategory } from "./lib/utils";
+import { cn, convertSlugToCategory } from "./lib/utils";
 import { Skeleton } from "./components/ui/skeleton";
+import NoneFoundText from "./components/NoneFoundText";
 
 export default function Category() {
   const { pathname } = useLocation();
@@ -30,35 +31,42 @@ export default function Category() {
   return (
     <>
       <NavBreadcrumb />
-      <section className="grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <section
+        className={cn(
+          "grid grid-cols-1 gap-6 p-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4",
+          !products?.length ? "flex-1" : "",
+        )}
+      >
         {isLoading &&
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} className="h-[300px]" />
           ))}
-        {products?.map((product: Product) => {
-          return (
-            <Link
-              to={`/categories/${convertCategoryToSlug(product.category)}/${product.id}`}
-              key={product.id}
-            >
-              <Card className="h-full hover:shadow-lg">
-                <CardContent className="flex w-full flex-col items-center justify-start gap-2">
-                  <img
-                    src={product.image}
-                    alt={product.title}
-                    className="aspect-square size-[100px]"
-                  />
-                  <h3 className="line-clamp-3 text-xl font-semibold">
-                    {product.title}
-                  </h3>
-                  <p className="line-clamp-4 w-full text-gray-600">
-                    {product.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
-          );
-        })}
+        {products &&
+          (products.length ? (
+            products.map((product: Product) => {
+              return (
+                <Link to={`/products/${product.id}`} key={product.id}>
+                  <Card className="h-full hover:shadow-lg">
+                    <CardContent className="flex w-full flex-col items-center justify-start gap-2">
+                      <img
+                        src={product.image}
+                        alt={product.title}
+                        className="aspect-square size-[100px]"
+                      />
+                      <h3 className="line-clamp-3 text-xl font-semibold">
+                        {product.title}
+                      </h3>
+                      <p className="line-clamp-4 w-full text-gray-600">
+                        {product.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              );
+            })
+          ) : (
+            <NoneFoundText text="No products found." />
+          ))}
       </section>
     </>
   );

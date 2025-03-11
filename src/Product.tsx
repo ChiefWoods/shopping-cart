@@ -12,7 +12,6 @@ export default function Product() {
   const { pathname } = useLocation();
   const { items, setItems } = useCart();
   const { setIsOpen } = useSheet();
-  const id = pathname.split("/")[3];
   const [amount, setAmount] = useState<number>(1);
 
   const {
@@ -20,7 +19,7 @@ export default function Product() {
     isLoading,
     error,
   } = useSWR(
-    `${import.meta.env.VITE_FAKE_STORE_API}/products/${id}`,
+    `${import.meta.env.VITE_FAKE_STORE_API}${pathname}`,
     async (url) => {
       const res = await fetch(url);
       const product: Product = await res.json();
