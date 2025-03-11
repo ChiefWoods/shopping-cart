@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { createBrowserRouter, RouterProvider } from "react-router";
+import { createHashRouter, RouterProvider } from "react-router";
 import Layout from "./Layout.tsx";
 import { SWRConfig } from "swr";
 import Category from "./Category.tsx";
@@ -12,7 +12,7 @@ import Checkout from "./Checkout.tsx";
 import ErrorPage from "./ErrorPage.tsx";
 import RootErrorPage from "./RootErrorPage.tsx";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Layout />,
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
             element: <Category />,
           },
           {
-            path: "categories/:category/:id",
+            path: "products/:id",
             element: <Product />,
           },
           {
